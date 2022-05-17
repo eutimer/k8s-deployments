@@ -1,0 +1,33 @@
+  GNU nano 4.8                                                                         deploy_pods_db.yaml                                                                                    
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb
+  labels:
+    app: mariadb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+      - name: mariadb
+        image: mariadb:latest
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          value: root
+        volumeMounts:
+        - name: nfs-volume
+          mountPath: /var/lib/mysql
+        ports:
+        - containerPort: 3306
+      volumes:
+      - name: nfs-volume
+        persistentVolumeClaim:
+          claimName: nfs-pvc
+

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: web1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web1
+  template:
+    metadata:
+      labels:
+        app: web1
+    spec:
+      containers:
+      - name: web1
+        image: wordpress:latest
+        volumeMounts:
+        - name: nfs-volume2
+          mountPath: /var/www/html
+        ports:
+        - containerPort: 80
+      volumes:
+        - name: nfs-volume2
+          persistentVolumeClaim:
+            claimName: nfs-pvc-web

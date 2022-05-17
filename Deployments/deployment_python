@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python
+  labels:
+    app: python1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python1
+  template:
+    metadata:
+      labels:
+        app: python1
+    spec:
+      containers:
+      - name: python1
+        image: eutimer/riopy:v1
+        command: ["/bin/sh","-c"]
+        args: ["pip install -r requirements.txt; python3 bot.py"]
+        volumeMounts:
+        - name: nfs-volume2
+          mountPath: /app
+      volumes:
+        - name: nfs-volume2
+          persistentVolumeClaim:
+            claimName: nfs-pvc-python
